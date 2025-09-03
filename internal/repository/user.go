@@ -9,7 +9,7 @@ import (
 )
 
 type UserRepository interface {
-	GetUser(ctx context.Context, id string) (*model.User, error)
+	GetUser(ctx context.Context, id int) (*model.User, error)
 	CreateUser(ctx context.Context, user *model.User) error
 	ListUsers(ctx context.Context) ([]*model.User, error)
 }
@@ -22,7 +22,7 @@ func NewUserRepository(db *bun.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) GetUser(ctx context.Context, id string) (*model.User, error) {
+func (r *userRepository) GetUser(ctx context.Context, id int) (*model.User, error) {
 	var user model.User
 	err := r.db.NewSelect().Model(&user).Where("id = ?", id).Scan(ctx)
 	return &user, err

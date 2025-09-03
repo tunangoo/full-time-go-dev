@@ -1,6 +1,11 @@
 package config
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	swaggerFiles "github.com/swaggo/files"
+)
 
 // type APIServer struct {
 // 	Name   string
@@ -114,17 +119,28 @@ import "github.com/gin-gonic/gin"
 // }
 
 type APIServer struct {
-	Name string
-	Addr string
+	Name   string
+	Addr   string
+	Router *gin.Engine
 }
 
 func NewAPIServer(name, addr string) *APIServer {
+	router := gin.Default()
+
+	router.GET("/healthz", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+
+	// Register Swagger documentation
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	return &APIServer{
-		Name: name,
-		Addr: addr,
+		Name:   name,
+		Addr:   addr,
+		Router: router,
 	}
 }
 
 func (s *APIServer) Run() {
-	gin.New().Run(s.Addr)
+	s.Router.Run(s.Addr)
 }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/tunangoo/full-time-go-dev/internal/service"
 
@@ -37,7 +38,7 @@ func (h *UserHandler) RegisterRoutes(router gin.IRouter) {
 // @Produce json
 // @Success 200 {object} gin.H{total=int,users=[]model.User}
 // @Failure 400,500 {object} model.ErrorResponse
-// @Router /api/v1/user/all [get]
+// @Router /v1/user/all [get]
 func (h *UserHandler) ListAllUser(c *gin.Context) {
 	resp, err := h.userService.ListAllUser(c.Request.Context())
 	if err != nil {
@@ -61,9 +62,10 @@ func (h *UserHandler) ListAllUser(c *gin.Context) {
 // @Tags user
 // @Accept json
 // @Produce json
+// @Param request body model.CreateUserRequest true "Create user request"
 // @Success 201 {object} gin.H{message=string,user=model.User}
 // @Failure 400,500 {object} model.ErrorResponse
-// @Router /api/v1/user/create [post]
+// @Router /v1/user/create [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req model.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -75,12 +77,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := &model.User{
-		FirstName: req.FirstName,
-		LastName:  req.LastName,
-	}
-
-	err := h.userService.CreateUser(c.Request.Context(), user)
+	user, err := h.userService.CreateUser(c.Request.Context(), &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
 			Code:    http.StatusInternalServerError,
@@ -104,9 +101,17 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} gin.H{user=model.User}
 // @Failure 400,500 {object} model.ErrorResponse
-// @Router /api/v1/user/:id [get]
+// @Router /v1/user/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
-	id := c.Param("id")
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "Bad request",
+			Detail:  err.Error(),
+		})
+		return
+	}
 	user, err := h.userService.GetUser(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, model.ErrorResponse{

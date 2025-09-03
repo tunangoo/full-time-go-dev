@@ -1,19 +1,32 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
+	_ "github.com/tunangoo/full-time-go-dev/docs"
 	"github.com/tunangoo/full-time-go-dev/internal/config"
 )
 
+// @title Full Time Go Dev API
+// @version 1.0
+// @description Full Time Go Dev API
+// @contact.name API Support
+// @contact.email support@full-time-go-dev.com
+// @host localhost:7000
+// @BasePath /api
+// @schemes http
 func main() {
-	log.Println(config.SvcCfg.Server.Addr)
-	log.Println(config.SvcCfg.Database.Host)
-	log.Println(config.SvcCfg.Database.Port)
-	log.Println(config.SvcCfg.Database.User)
-	log.Println(config.SvcCfg.Database.Password)
-	log.Println(config.SvcCfg.Database.Database)
-	log.Println(config.SvcCfg.Database.Schema)
-	log.Println(config.SvcCfg.Database.SSLMode)
-	log.Println(config.SvcCfg.Environment)
+	server := config.NewAPIServer(config.SvcCfg.Server.Name, config.SvcCfg.Server.Addr)
+
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", config.SvcCfg.Database.User, config.SvcCfg.Database.Password, config.SvcCfg.Database.Host, config.SvcCfg.Database.Port, config.SvcCfg.Database.Database, config.SvcCfg.Database.SSLMode)
+	db := config.NewPostgres(dsn)
+
+	handler, err := wireApp(db)
+	if err != nil {
+		panic(err)
+	}
+
+	handler.RegisterRoutes(server.Router)
+
+	server.Run()
 }
