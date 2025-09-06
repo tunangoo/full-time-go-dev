@@ -46,8 +46,6 @@ definitions:
         type: string
       last_name:
         type: string
-      password:
-        type: string
       updated_at:
         type: string
     type: object
@@ -61,10 +59,49 @@ info:
   version: "1.0"
 paths:
   /v1/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Delete user
+      tags:
+      - user
     get:
       consumes:
       - application/json
       description: Get user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

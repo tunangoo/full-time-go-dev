@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/tunangoo/full-time-go-dev/internal/model"
 
@@ -9,9 +10,11 @@ import (
 )
 
 type UserRepository interface {
-	GetUser(ctx context.Context, id int) (*model.User, error)
 	CreateUser(ctx context.Context, user *model.User) error
 	ListUsers(ctx context.Context) ([]*model.User, error)
+	GetUserByID(ctx context.Context, id int) (*model.User, error)
+	DeleteUser(ctx context.Context, id int) error
+	UpdateUser(ctx context.Context, user *model.User) error
 }
 
 type userRepository struct {
@@ -22,13 +25,21 @@ func NewUserRepository(db *bun.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) GetUser(ctx context.Context, id int) (*model.User, error) {
+func (r *userRepository) GetUserByID(ctx context.Context, id int) (*model.User, error) {
 	var user model.User
 	err := r.db.NewSelect().Model(&user).Where("id = ?", id).Scan(ctx)
 	return &user, err
 }
 
+func (r *userRepository) DeleteUser(ctx context.Context, id int) error {
+	_, err := r.db.NewDelete().Model(&model.User{}).Where("id = ?", id).Exec(ctx)
+	return err
+}
+
 func (r *userRepository) CreateUser(ctx context.Context, user *model.User) error {
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+
 	_, err := r.db.NewInsert().Model(user).Exec(ctx)
 	return err
 }
@@ -37,4 +48,10 @@ func (r *userRepository) ListUsers(ctx context.Context) ([]*model.User, error) {
 	var users []*model.User
 	err := r.db.NewSelect().Model(&users).Scan(ctx)
 	return users, err
+}
+
+func (r *userRepository) UpdateUser(ctx context.Context, user *model.User) error {
+	user.UpdatedAt = time.Now()
+	_, err := r.db.NewUpdate().Model(user).Where("id = ?", user.ID).Exec(ctx)
+	return err
 }
