@@ -10,11 +10,11 @@ import (
 )
 
 type UserService interface {
-	GetUserByID(ctx context.Context, id int) (*model.User, error)
+	GetUserByID(ctx context.Context, id int64) (*model.User, error)
 	CreateUser(ctx context.Context, user *model.CreateUserRequest) (*model.User, error)
 	ListAllUser(ctx context.Context) ([]*model.User, error)
-	DeleteUser(ctx context.Context, id int) error
-	UpdateUser(ctx context.Context, id int, req *model.UpdateUserRequest) error
+	DeleteUser(ctx context.Context, id int64) error
+	UpdateUser(ctx context.Context, id int64, req *model.UpdateUserRequest) error
 }
 
 type userService struct {
@@ -29,7 +29,7 @@ func NewUserService(
 	}
 }
 
-func (s *userService) GetUserByID(ctx context.Context, id int) (*model.User, error) {
+func (s *userService) GetUserByID(ctx context.Context, id int64) (*model.User, error) {
 	user, err := s.userRepository.GetUserByID(ctx, id)
 	if err != nil {
 		log.Println("Error getting user by ID:", err)
@@ -70,7 +70,7 @@ func (s *userService) ListAllUser(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
-func (s *userService) DeleteUser(ctx context.Context, id int) error {
+func (s *userService) DeleteUser(ctx context.Context, id int64) error {
 	err := s.userRepository.DeleteUser(ctx, id)
 	if err != nil {
 		log.Println("Error deleting user:", err)
@@ -79,7 +79,7 @@ func (s *userService) DeleteUser(ctx context.Context, id int) error {
 	return nil
 }
 
-func (s *userService) UpdateUser(ctx context.Context, id int, req *model.UpdateUserRequest) error {
+func (s *userService) UpdateUser(ctx context.Context, id int64, req *model.UpdateUserRequest) error {
 	user, err := s.userRepository.GetUserByID(ctx, id)
 	if err != nil {
 		log.Println("Error getting user by ID:", err)

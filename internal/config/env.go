@@ -27,6 +27,11 @@ type svcConfig struct {
 	Environment string   `env:"ENVIRONMENT" envDefault:"development"`
 	Server      Server   `envPrefix:"SERVER_"`
 	Database    Database `envPrefix:"DATABASE_"`
+	Jwt         Jwt      `envPrefix:"JWT_"`
+}
+
+type Jwt struct {
+	Secret string `env:"SECRET" envDefault:"secret"`
 }
 
 func init() {

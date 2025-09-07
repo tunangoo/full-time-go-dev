@@ -5,6 +5,7 @@ go 1.24.5
 require (
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/gin-gonic/gin v1.10.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/wire v0.7.0
 	github.com/joho/godotenv v1.5.1
 	github.com/swaggo/files v1.0.1

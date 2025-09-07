@@ -9,4 +9,5 @@ var ProviderSet = wire.NewSet(
 	NewUserHandler,
 	NewHotelHandler,
 	NewRoomHandler,
+	NewAuthHandler,
 )

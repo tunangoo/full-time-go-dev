@@ -18,8 +18,135 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/auth/login": {
+            "post": {
+                "description": "Login user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "Login user request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/register": {
+            "post": {
+                "description": "Register user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "Register user request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/hotel/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "List all hotels",
                 "consumes": [
                     "application/json"
@@ -73,6 +200,11 @@ const docTemplate = `{
         },
         "/v1/hotel/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create hotel",
                 "consumes": [
                     "application/json"
@@ -134,6 +266,11 @@ const docTemplate = `{
         },
         "/v1/hotel/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get hotel",
                 "consumes": [
                     "application/json"
@@ -188,6 +325,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update hotel",
                 "consumes": [
                     "application/json"
@@ -251,6 +393,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete hotel",
                 "consumes": [
                     "application/json"
@@ -307,6 +454,11 @@ const docTemplate = `{
         },
         "/v1/room/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "List all rooms",
                 "consumes": [
                     "application/json"
@@ -360,6 +512,11 @@ const docTemplate = `{
         },
         "/v1/room/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create room",
                 "consumes": [
                     "application/json"
@@ -421,6 +578,11 @@ const docTemplate = `{
         },
         "/v1/room/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get room",
                 "consumes": [
                     "application/json"
@@ -475,6 +637,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update room",
                 "consumes": [
                     "application/json"
@@ -538,6 +705,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete room",
                 "consumes": [
                     "application/json"
@@ -592,122 +764,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/user/all": {
+        "/v1/user": {
             "get": {
-                "description": "List all user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "List all user",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/gin.H"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "total": {
-                                            "type": "integer"
-                                        },
-                                        "users": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/create": {
-            "post": {
-                "description": "Create user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "Create user",
-                "parameters": [
+                "security": [
                     {
-                        "description": "Create user request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest"
-                        }
+                        "BearerAuth": []
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/gin.H"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "user": {
-                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/{id}": {
-            "get": {
                 "description": "Get user",
                 "consumes": [
                     "application/json"
@@ -719,15 +782,6 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -762,6 +816,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update user",
                 "consumes": [
                     "application/json"
@@ -774,13 +833,6 @@ const docTemplate = `{
                 ],
                 "summary": "Update user",
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "Update user request",
                         "name": "request",
@@ -825,6 +877,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete user",
                 "consumes": [
                     "application/json"
@@ -836,15 +893,6 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Delete user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1011,6 +1059,23 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_tunangoo_full-time-go-dev_internal_model.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 8
+                }
+            }
+        },
         "github_com_tunangoo_full-time-go-dev_internal_model.Room": {
             "type": "object",
             "properties": {
@@ -1151,6 +1216,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

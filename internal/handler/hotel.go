@@ -20,8 +20,8 @@ func NewHotelHandler(
 	return &HotelHandler{hotelService: hotelService}
 }
 
-func (h *HotelHandler) RegisterRoutes(router gin.IRouter) {
-	g := router.Group("/hotel")
+func (h *HotelHandler) RegisterRoutes(router gin.IRouter, authMiddleware gin.HandlerFunc) {
+	g := router.Group("/hotel", authMiddleware)
 	g.GET("/all", h.ListAllHotels)
 	g.POST("/create", h.CreateHotel)
 	g.GET("/:id", h.GetHotel)
@@ -38,6 +38,7 @@ func (h *HotelHandler) RegisterRoutes(router gin.IRouter) {
 // @Success 200 {object} gin.H{total=int,hotels=[]model.Hotel}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/hotel/all [get]
+// @Security BearerAuth
 func (h *HotelHandler) ListAllHotels(c *gin.Context) {
 	resp, err := h.hotelService.ListAllHotels(c.Request.Context())
 	if err != nil {
@@ -58,6 +59,7 @@ func (h *HotelHandler) ListAllHotels(c *gin.Context) {
 // @Success 201 {object} gin.H{message=string,hotel=model.Hotel}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/hotel/create [post]
+// @Security BearerAuth
 func (h *HotelHandler) CreateHotel(c *gin.Context) {
 	var req model.CreateHotelRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -84,6 +86,7 @@ func (h *HotelHandler) CreateHotel(c *gin.Context) {
 // @Success 200 {object} gin.H{hotel=model.Hotel}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/hotel/{id} [get]
+// @Security BearerAuth
 func (h *HotelHandler) GetHotel(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -110,6 +113,7 @@ func (h *HotelHandler) GetHotel(c *gin.Context) {
 // @Success 200 {object} gin.H{message=string}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/hotel/{id} [delete]
+// @Security BearerAuth
 func (h *HotelHandler) DeleteHotel(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -136,6 +140,7 @@ func (h *HotelHandler) DeleteHotel(c *gin.Context) {
 // @Success 200 {object} gin.H{message=string}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/hotel/{id} [put]
+// @Security BearerAuth
 func (h *HotelHandler) UpdateHotel(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {

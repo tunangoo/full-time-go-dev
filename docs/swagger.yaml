@@ -93,6 +93,18 @@ definitions:
       updated_at:
         type: string
     type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 255
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
   github_com_tunangoo_full-time-go-dev_internal_model.Room:
     properties:
       base_price:
@@ -203,6 +215,80 @@ info:
   title: Full Time Go Dev API
   version: "1.0"
 paths:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: Login user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+                user:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Login user
+      tags:
+      - auth
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user
+      parameters:
+      - description: Register user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+                user:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Register user
+      tags:
+      - auth
   /v1/hotel/{id}:
     delete:
       consumes:
@@ -234,6 +320,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete hotel
       tags:
       - hotel
@@ -267,6 +355,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get hotel
       tags:
       - hotel
@@ -306,6 +396,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update hotel
       tags:
       - hotel
@@ -338,6 +430,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: List all hotels
       tags:
       - hotel
@@ -375,6 +469,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create hotel
       tags:
       - hotel
@@ -409,6 +505,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete room
       tags:
       - room
@@ -442,6 +540,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get room
       tags:
       - room
@@ -481,6 +581,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update room
       tags:
       - room
@@ -513,6 +615,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: List all rooms
       tags:
       - room
@@ -550,20 +654,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create room
       tags:
       - room
-  /v1/user/{id}:
+  /v1/user:
     delete:
       consumes:
       - application/json
       description: Delete user
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
@@ -584,6 +684,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete user
       tags:
       - user
@@ -591,12 +693,6 @@ paths:
       consumes:
       - application/json
       description: Get user
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
@@ -617,6 +713,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get user
       tags:
       - user
@@ -625,11 +723,6 @@ paths:
       - application/json
       description: Update user
       parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: Update user request
         in: body
         name: request
@@ -656,78 +749,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update user
-      tags:
-      - user
-  /v1/user/all:
-    get:
-      consumes:
-      - application/json
-      description: List all user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/gin.H'
-            - properties:
-                total:
-                  type: integer
-                users:
-                  items:
-                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-      summary: List all user
-      tags:
-      - user
-  /v1/user/create:
-    post:
-      consumes:
-      - application/json
-      description: Create user
-      parameters:
-      - description: Create user request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/gin.H'
-            - properties:
-                message:
-                  type: string
-                user:
-                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.User'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-      summary: Create user
       tags:
       - user
 schemes:
 - http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

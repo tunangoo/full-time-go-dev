@@ -20,7 +20,7 @@ func NewRoomHandler(
 	return &RoomHandler{roomService: roomService}
 }
 
-func (h *RoomHandler) RegisterRoutes(router gin.IRouter) {
+func (h *RoomHandler) RegisterRoutes(router gin.IRouter, authMiddleware gin.HandlerFunc) {
 	g := router.Group("/room")
 	g.GET("/all", h.ListAllRooms)
 	g.POST("/create", h.CreateRoom)
@@ -38,6 +38,7 @@ func (h *RoomHandler) RegisterRoutes(router gin.IRouter) {
 // @Success 200 {object} gin.H{total=int,rooms=[]model.Room}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/room/all [get]
+// @Security BearerAuth
 func (h *RoomHandler) ListAllRooms(c *gin.Context) {
 	resp, err := h.roomService.ListAllRooms(c.Request.Context())
 	if err != nil {
@@ -58,6 +59,7 @@ func (h *RoomHandler) ListAllRooms(c *gin.Context) {
 // @Success 201 {object} gin.H{message=string,room=model.Room}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/room/create [post]
+// @Security BearerAuth
 func (h *RoomHandler) CreateRoom(c *gin.Context) {
 	var req model.CreateRoomRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -84,6 +86,7 @@ func (h *RoomHandler) CreateRoom(c *gin.Context) {
 // @Success 200 {object} gin.H{room=model.Room}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/room/{id} [get]
+// @Security BearerAuth
 func (h *RoomHandler) GetRoom(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -110,6 +113,7 @@ func (h *RoomHandler) GetRoom(c *gin.Context) {
 // @Success 200 {object} gin.H{message=string}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/room/{id} [delete]
+// @Security BearerAuth
 func (h *RoomHandler) DeleteRoom(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -136,6 +140,7 @@ func (h *RoomHandler) DeleteRoom(c *gin.Context) {
 // @Success 200 {object} gin.H{message=string}
 // @Failure 400,500 {object} model.ErrorResponse
 // @Router /v1/room/{id} [put]
+// @Security BearerAuth
 func (h *RoomHandler) UpdateRoom(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {

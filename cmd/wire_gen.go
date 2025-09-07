@@ -7,7 +7,9 @@
 package main
 
 import (
+	"github.com/tunangoo/full-time-go-dev/internal/config"
 	"github.com/tunangoo/full-time-go-dev/internal/handler"
+	"github.com/tunangoo/full-time-go-dev/internal/middleware"
 	"github.com/tunangoo/full-time-go-dev/internal/repository"
 	"github.com/tunangoo/full-time-go-dev/internal/service"
 	"github.com/uptrace/bun"
@@ -19,7 +21,7 @@ import (
 
 // Injectors from wire.go:
 
-func wireApp(db *bun.DB) (*handler.Handler, error) {
+func wireApp(db *bun.DB, jwtProvider config.TokenProvider) (*handler.Handler, error) {
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
@@ -29,6 +31,9 @@ func wireApp(db *bun.DB) (*handler.Handler, error) {
 	roomRepository := repository.NewRoomRepository(db)
 	roomService := service.NewRoomService(roomRepository, hotelRepository)
 	roomHandler := handler.NewRoomHandler(roomService)
-	handlerHandler := handler.NewHandler(userHandler, hotelHandler, roomHandler)
+	authService := service.NewAuthService(userRepository, jwtProvider)
+	authHandler := handler.NewAuthHandler(userService, authService)
+	jwtMiddleware := middleware.NewJWTMiddleware(jwtProvider, userRepository)
+	handlerHandler := handler.NewHandler(userHandler, hotelHandler, roomHandler, authHandler, jwtMiddleware)
 	return handlerHandler, nil
 }

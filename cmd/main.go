@@ -15,13 +15,18 @@ import (
 // @host localhost:7000
 // @BasePath /api
 // @schemes http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	server := config.NewAPIServer(config.SvcCfg.Server.Name, config.SvcCfg.Server.Addr)
 
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", config.SvcCfg.Database.User, config.SvcCfg.Database.Password, config.SvcCfg.Database.Host, config.SvcCfg.Database.Port, config.SvcCfg.Database.Database, config.SvcCfg.Database.SSLMode)
 	db := config.NewPostgres(dsn)
 
-	handler, err := wireApp(db)
+	jwtProvider := config.NewJwtProvider(config.SvcCfg.Jwt.Secret)
+
+	handler, err := wireApp(db, jwtProvider)
 	if err != nil {
 		panic(err)
 	}
