@@ -10,3 +10,5 @@ wire:
 	wire ./...
 swagger:
 	swag init -g cmd/main.go -d ./ --parseDependency --parseInternal
+test:
+	go test ./... -v
