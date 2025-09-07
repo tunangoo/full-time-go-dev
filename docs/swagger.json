@@ -15,6 +15,580 @@
     "host": "localhost:7000",
     "basePath": "/api",
     "paths": {
+        "/v1/hotel/all": {
+            "get": {
+                "description": "List all hotels",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotel"
+                ],
+                "summary": "List all hotels",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "hotels": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/hotel/create": {
+            "post": {
+                "description": "Create hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotel"
+                ],
+                "summary": "Create hotel",
+                "parameters": [
+                    {
+                        "description": "Create hotel request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateHotelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "hotel": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/hotel/{id}": {
+            "get": {
+                "description": "Get hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotel"
+                ],
+                "summary": "Get hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "hotel": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotel"
+                ],
+                "summary": "Update hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update hotel request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateHotelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotel"
+                ],
+                "summary": "Delete hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/room/all": {
+            "get": {
+                "description": "List all rooms",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room"
+                ],
+                "summary": "List all rooms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "rooms": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/room/create": {
+            "post": {
+                "description": "Create room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room"
+                ],
+                "summary": "Create room",
+                "parameters": [
+                    {
+                        "description": "Create room request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateRoomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "room": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/room/{id}": {
+            "get": {
+                "description": "Get room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room"
+                ],
+                "summary": "Get room",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Room ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "room": {
+                                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room"
+                ],
+                "summary": "Update room",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Room ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update room request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateRoomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room"
+                ],
+                "summary": "Delete room",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Room ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/all": {
             "get": {
                 "description": "List all user",
@@ -184,6 +758,69 @@
                     }
                 }
             },
+            "put": {
+                "description": "Update user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update user request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/gin.H"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete user",
                 "consumes": [
@@ -245,6 +882,60 @@
             "type": "object",
             "additionalProperties": {}
         },
+        "github_com_tunangoo_full-time-go-dev_internal_model.CreateHotelRequest": {
+            "type": "object",
+            "required": [
+                "location",
+                "name",
+                "rating"
+            ],
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "rating": {
+                    "type": "number",
+                    "maximum": 5,
+                    "minimum": 0
+                }
+            }
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.CreateRoomRequest": {
+            "type": "object",
+            "required": [
+                "base_price",
+                "hotel_id",
+                "size",
+                "type"
+            ],
+            "properties": {
+                "base_price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "string",
+                    "enum": [
+                        "small",
+                        "normal",
+                        "kingsize"
+                    ]
+                },
+                "type": {
+                    "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType"
+                }
+            }
+        },
         "github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest": {
             "type": "object",
             "required": [
@@ -288,6 +979,153 @@
                 }
             }
         },
+        "github_com_tunangoo_full-time-go-dev_internal_model.Hotel": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "rooms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.Room": {
+            "type": "object",
+            "properties": {
+                "base_price": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.RoomType": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "SingleRoomType",
+                "DoubleRoomType",
+                "SeaSideRoomType",
+                "DeluxeRoomType"
+            ]
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.UpdateHotelRequest": {
+            "type": "object",
+            "required": [
+                "location",
+                "name",
+                "rating"
+            ],
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "rating": {
+                    "type": "number",
+                    "maximum": 5,
+                    "minimum": 0
+                }
+            }
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.UpdateRoomRequest": {
+            "type": "object",
+            "required": [
+                "base_price",
+                "hotel_id",
+                "size",
+                "type"
+            ],
+            "properties": {
+                "base_price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "string",
+                    "enum": [
+                        "small",
+                        "normal",
+                        "kingsize"
+                    ]
+                },
+                "type": {
+                    "$ref": "#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType"
+                }
+            }
+        },
+        "github_com_tunangoo_full-time-go-dev_internal_model.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "last_name"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3
+                }
+            }
+        },
         "github_com_tunangoo_full-time-go-dev_internal_model.User": {
             "type": "object",
             "properties": {
@@ -301,7 +1139,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "last_name": {
                     "type": "string"

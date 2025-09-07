@@ -7,4 +7,6 @@ import (
 var ProviderSet = wire.NewSet(
 	NewHandler,
 	NewUserHandler,
+	NewHotelHandler,
+	NewRoomHandler,
 )

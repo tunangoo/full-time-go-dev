@@ -3,6 +3,46 @@ definitions:
   gin.H:
     additionalProperties: {}
     type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.CreateHotelRequest:
+    properties:
+      location:
+        maxLength: 255
+        minLength: 3
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      rating:
+        maximum: 5
+        minimum: 0
+        type: number
+    required:
+    - location
+    - name
+    - rating
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.CreateRoomRequest:
+    properties:
+      base_price:
+        minimum: 0
+        type: number
+      hotel_id:
+        type: integer
+      size:
+        enum:
+        - small
+        - normal
+        - kingsize
+        type: string
+      type:
+        $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType'
+    required:
+    - base_price
+    - hotel_id
+    - size
+    - type
+    type: object
   github_com_tunangoo_full-time-go-dev_internal_model.CreateUserRequest:
     properties:
       email:
@@ -34,6 +74,111 @@ definitions:
       message:
         type: string
     type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.Hotel:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      rating:
+        type: number
+      rooms:
+        items:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.Room:
+    properties:
+      base_price:
+        type: number
+      created_at:
+        type: string
+      hotel_id:
+        type: integer
+      id:
+        type: integer
+      size:
+        type: string
+      type:
+        $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType'
+      updated_at:
+        type: string
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.RoomType:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - SingleRoomType
+    - DoubleRoomType
+    - SeaSideRoomType
+    - DeluxeRoomType
+  github_com_tunangoo_full-time-go-dev_internal_model.UpdateHotelRequest:
+    properties:
+      location:
+        maxLength: 255
+        minLength: 3
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      rating:
+        maximum: 5
+        minimum: 0
+        type: number
+    required:
+    - location
+    - name
+    - rating
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.UpdateRoomRequest:
+    properties:
+      base_price:
+        minimum: 0
+        type: number
+      hotel_id:
+        type: integer
+      size:
+        enum:
+        - small
+        - normal
+        - kingsize
+        type: string
+      type:
+        $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.RoomType'
+    required:
+    - base_price
+    - hotel_id
+    - size
+    - type
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      last_name:
+        maxLength: 255
+        minLength: 3
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
   github_com_tunangoo_full-time-go-dev_internal_model.User:
     properties:
       created_at:
@@ -43,7 +188,7 @@ definitions:
       first_name:
         type: string
       id:
-        type: string
+        type: integer
       last_name:
         type: string
       updated_at:
@@ -58,6 +203,356 @@ info:
   title: Full Time Go Dev API
   version: "1.0"
 paths:
+  /v1/hotel/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete hotel
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Delete hotel
+      tags:
+      - hotel
+    get:
+      consumes:
+      - application/json
+      description: Get hotel
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                hotel:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Get hotel
+      tags:
+      - hotel
+    put:
+      consumes:
+      - application/json
+      description: Update hotel
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update hotel request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateHotelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Update hotel
+      tags:
+      - hotel
+  /v1/hotel/all:
+    get:
+      consumes:
+      - application/json
+      description: List all hotels
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                hotels:
+                  items:
+                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: List all hotels
+      tags:
+      - hotel
+  /v1/hotel/create:
+    post:
+      consumes:
+      - application/json
+      description: Create hotel
+      parameters:
+      - description: Create hotel request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateHotelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                hotel:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Create hotel
+      tags:
+      - hotel
+  /v1/room/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Delete room
+      tags:
+      - room
+    get:
+      consumes:
+      - application/json
+      description: Get room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                room:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Get room
+      tags:
+      - room
+    put:
+      consumes:
+      - application/json
+      description: Update room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update room request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Update room
+      tags:
+      - room
+  /v1/room/all:
+    get:
+      consumes:
+      - application/json
+      description: List all rooms
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                rooms:
+                  items:
+                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: List all rooms
+      tags:
+      - room
+  /v1/room/create:
+    post:
+      consumes:
+      - application/json
+      description: Create room
+      parameters:
+      - description: Create room request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+                room:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Room'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Create room
+      tags:
+      - room
   /v1/user/{id}:
     delete:
       consumes:
@@ -123,6 +618,45 @@ paths:
           schema:
             $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
       summary: Get user
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      summary: Update user
       tags:
       - user
   /v1/user/all:

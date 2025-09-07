@@ -13,12 +13,22 @@ import (
 	"github.com/uptrace/bun"
 )
 
+import (
+	_ "github.com/tunangoo/full-time-go-dev/docs"
+)
+
 // Injectors from wire.go:
 
 func wireApp(db *bun.DB) (*handler.Handler, error) {
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
-	handlerHandler := handler.NewHandler(userHandler)
+	hotelRepository := repository.NewHotelRepository(db)
+	hotelService := service.NewHotelService(hotelRepository)
+	hotelHandler := handler.NewHotelHandler(hotelService)
+	roomRepository := repository.NewRoomRepository(db)
+	roomService := service.NewRoomService(roomRepository, hotelRepository)
+	roomHandler := handler.NewRoomHandler(roomService)
+	handlerHandler := handler.NewHandler(userHandler, hotelHandler, roomHandler)
 	return handlerHandler, nil
 }
