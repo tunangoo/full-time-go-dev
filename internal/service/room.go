@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"log"
 
 	"github.com/tunangoo/full-time-go-dev/internal/model"
@@ -14,20 +15,24 @@ type RoomService interface {
 	ListAllRooms(ctx context.Context) ([]*model.Room, error)
 	DeleteRoom(ctx context.Context, id int64) error
 	UpdateRoom(ctx context.Context, id int64, req *model.UpdateRoomRequest) error
+	BookRoom(ctx context.Context, userID int64, roomID int64, req *model.CreateBookingRequest) error
 }
 
 type roomService struct {
-	roomRepository  repository.RoomRepository
-	hotelRepository repository.HotelRepository
+	roomRepository    repository.RoomRepository
+	hotelRepository   repository.HotelRepository
+	bookingRepository repository.BookingRepository
 }
 
 func NewRoomService(
 	roomRepository repository.RoomRepository,
 	hotelRepository repository.HotelRepository,
+	bookingRepository repository.BookingRepository,
 ) RoomService {
 	return &roomService{
-		roomRepository:  roomRepository,
-		hotelRepository: hotelRepository,
+		roomRepository:    roomRepository,
+		hotelRepository:   hotelRepository,
+		bookingRepository: bookingRepository,
 	}
 }
 
@@ -98,6 +103,45 @@ func (s *roomService) UpdateRoom(ctx context.Context, id int64, req *model.Updat
 
 	if err := s.roomRepository.UpdateRoom(ctx, room); err != nil {
 		log.Println("Error updating room:", err)
+		return err
+	}
+	return nil
+}
+
+func (s *roomService) BookRoom(ctx context.Context, userID int64, roomID int64, req *model.CreateBookingRequest) error {
+	// Step 1: Check if the room is exists
+	_, err := s.roomRepository.GetRoomByID(ctx, roomID)
+	if err != nil {
+		log.Println("Error getting room:", err)
+		return err
+	}
+
+	// Step 2: Check if the room is available
+	bookings, err := s.bookingRepository.ListBookings(ctx, model.ListBookingsRequest{
+		RoomID:   roomID,
+		FromDate: &req.FromDate,
+		TillDate: &req.TillDate,
+	})
+	if err != nil {
+		log.Println("Error getting bookings:", err)
+		return err
+	}
+	if len(bookings) > 0 {
+		log.Println("Room is not available")
+		return errors.New("room is not available")
+	}
+
+	// Step 3: Create the booking
+	booking := &model.Booking{
+		UserID:        userID,
+		RoomID:        roomID,
+		NumberPersons: req.NumberPersons,
+		FromDate:      req.FromDate,
+		TillDate:      req.TillDate,
+	}
+	err = s.bookingRepository.CreateBooking(ctx, booking)
+	if err != nil {
+		log.Println("Error creating booking:", err)
 		return err
 	}
 	return nil

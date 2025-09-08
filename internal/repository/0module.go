@@ -6,4 +6,5 @@ var ProviderSet = wire.NewSet(
 	NewUserRepository,
 	NewHotelRepository,
 	NewRoomRepository,
+	NewBookingRepository,
 )
