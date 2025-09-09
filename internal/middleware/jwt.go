@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -61,7 +62,7 @@ func (m *JWTMiddleware) Handle() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
+		log.Printf("Middleware User: %+v", user)
 		c.Set("user", user)
 		c.Next()
 	}

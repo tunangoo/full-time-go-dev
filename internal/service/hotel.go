@@ -11,7 +11,7 @@ import (
 type HotelService interface {
 	GetHotelByID(ctx context.Context, id int64) (*model.Hotel, error)
 	CreateHotel(ctx context.Context, req *model.CreateHotelRequest) (*model.Hotel, error)
-	ListAllHotels(ctx context.Context) ([]*model.Hotel, error)
+	ListHotels(ctx context.Context, req *model.ListHotelsRequest) ([]*model.Hotel, int, error)
 	DeleteHotel(ctx context.Context, id int64) error
 	UpdateHotel(ctx context.Context, id int64, req *model.UpdateHotelRequest) error
 }
@@ -51,13 +51,13 @@ func (s *hotelService) CreateHotel(ctx context.Context, req *model.CreateHotelRe
 	return hotel, nil
 }
 
-func (s *hotelService) ListAllHotels(ctx context.Context) ([]*model.Hotel, error) {
-	hotels, err := s.hotelRepository.ListHotels(ctx)
+func (s *hotelService) ListHotels(ctx context.Context, req *model.ListHotelsRequest) ([]*model.Hotel, int, error) {
+	hotels, total, err := s.hotelRepository.ListHotels(ctx, req)
 	if err != nil {
 		log.Println("Error listing hotels:", err)
-		return nil, err
+		return nil, 0, err
 	}
-	return hotels, nil
+	return hotels, total, nil
 }
 
 func (s *hotelService) DeleteHotel(ctx context.Context, id int64) error {

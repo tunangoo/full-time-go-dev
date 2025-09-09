@@ -6,11 +6,12 @@ import (
 )
 
 type Handler struct {
-	userHandler   *UserHandler
-	hotelHandler  *HotelHandler
-	roomHandler   *RoomHandler
-	authHandler   *AuthHandler
-	jwtMiddleware *middleware.JWTMiddleware
+	userHandler    *UserHandler
+	hotelHandler   *HotelHandler
+	roomHandler    *RoomHandler
+	authHandler    *AuthHandler
+	bookingHandler *BookingHandler
+	jwtMiddleware  *middleware.JWTMiddleware
 }
 
 func NewHandler(
@@ -18,14 +19,16 @@ func NewHandler(
 	hotelHandler *HotelHandler,
 	roomHandler *RoomHandler,
 	authHandler *AuthHandler,
+	bookingHandler *BookingHandler,
 	jwtMiddleware *middleware.JWTMiddleware,
 ) *Handler {
 	return &Handler{
-		userHandler:   userHandler,
-		hotelHandler:  hotelHandler,
-		roomHandler:   roomHandler,
-		authHandler:   authHandler,
-		jwtMiddleware: jwtMiddleware,
+		userHandler:    userHandler,
+		hotelHandler:   hotelHandler,
+		roomHandler:    roomHandler,
+		authHandler:    authHandler,
+		bookingHandler: bookingHandler,
+		jwtMiddleware:  jwtMiddleware,
 	}
 }
 
@@ -35,4 +38,5 @@ func (h *Handler) RegisterRoutes(router *gin.Engine) {
 	h.hotelHandler.RegisterRoutes(apiv1, h.jwtMiddleware.Handle())
 	h.roomHandler.RegisterRoutes(apiv1, h.jwtMiddleware.Handle())
 	h.authHandler.RegisterRoutes(apiv1)
+	h.bookingHandler.RegisterRoutes(apiv1, h.jwtMiddleware.Handle())
 }

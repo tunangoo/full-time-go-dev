@@ -28,3 +28,9 @@ type UpdateHotelRequest struct {
 	Location string  `json:"location" binding:"required,min=3,max=255"`
 	Rating   float64 `json:"rating" binding:"required,min=0,max=5"`
 }
+
+type ListHotelsRequest struct {
+	Page   int64  `form:"page"`
+	Limit  int64  `form:"limit"`
+	Search string `form:"search"`
+}

@@ -22,31 +22,49 @@ func NewHotelHandler(
 
 func (h *HotelHandler) RegisterRoutes(router gin.IRouter, authMiddleware gin.HandlerFunc) {
 	g := router.Group("/hotel", authMiddleware)
-	g.GET("/all", h.ListAllHotels)
+	g.GET("", h.ListHotels)
 	g.POST("/create", h.CreateHotel)
 	g.GET("/:id", h.GetHotel)
 	g.DELETE("/:id", h.DeleteHotel)
 	g.PUT("/:id", h.UpdateHotel)
 }
 
-// ListAllHotels godoc
-// @Summary List all hotels
-// @Description List all hotels
+// ListHotels godoc
+// @Summary List hotels
+// @Description List hotels
 // @Tags hotel
 // @Accept json
 // @Produce json
+// @Param request query model.ListHotelsRequest true "List hotels request"
 // @Success 200 {object} gin.H{total=int,hotels=[]model.Hotel}
 // @Failure 400,500 {object} model.ErrorResponse
-// @Router /v1/hotel/all [get]
+// @Router /v1/hotel [get]
 // @Security BearerAuth
-func (h *HotelHandler) ListAllHotels(c *gin.Context) {
-	resp, err := h.hotelService.ListAllHotels(c.Request.Context())
-	if err != nil {
-		log.Println("Error listing hotels:", err)
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{Code: http.StatusInternalServerError, Message: "Internal server error", Detail: err.Error()})
+func (h *HotelHandler) ListHotels(c *gin.Context) {
+	var req model.ListHotelsRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		log.Println("Error binding query:", err)
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "Bad request",
+			Detail:  err.Error(),
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"hotels": resp, "total": len(resp)})
+
+	log.Printf("Request: %+v", req)
+
+	resp, total, err := h.hotelService.ListHotels(c.Request.Context(), &req)
+	if err != nil {
+		log.Println("Error listing hotels:", err)
+		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Internal server error",
+			Detail:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"hotels": resp, "total": total})
 }
 
 // CreateHotel godoc

@@ -3,6 +3,36 @@ definitions:
   gin.H:
     additionalProperties: {}
     type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.Booking:
+    properties:
+      cancelled:
+        type: boolean
+      created_at:
+        type: string
+      from_date:
+        type: string
+      id:
+        type: integer
+      number_persons:
+        type: integer
+      room_id:
+        type: integer
+      till_date:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  github_com_tunangoo_full-time-go-dev_internal_model.CreateBookingRequest:
+    properties:
+      from_date:
+        type: string
+      number_persons:
+        type: integer
+      till_date:
+        type: string
+    type: object
   github_com_tunangoo_full-time-go-dev_internal_model.CreateHotelRequest:
     properties:
       location:
@@ -59,11 +89,17 @@ definitions:
         maxLength: 255
         minLength: 8
         type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
     required:
     - email
     - first_name
     - last_name
     - password
+    - role
     type: object
   github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse:
     properties:
@@ -186,10 +222,16 @@ definitions:
         maxLength: 255
         minLength: 3
         type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
     required:
     - email
     - first_name
     - last_name
+    - role
     type: object
   github_com_tunangoo_full-time-go-dev_internal_model.User:
     properties:
@@ -202,6 +244,8 @@ definitions:
       id:
         type: integer
       last_name:
+        type: string
+      role:
         type: string
       updated_at:
         type: string
@@ -289,6 +333,156 @@ paths:
       summary: Register user
       tags:
       - auth
+  /v1/booking/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                booking:
+                  $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Booking'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get booking
+      tags:
+      - booking
+  /v1/booking/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancel booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Cancel booking
+      tags:
+      - booking
+  /v1/booking/all:
+    get:
+      consumes:
+      - application/json
+      description: List all bookings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                bookings:
+                  items:
+                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Booking'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List all bookings
+      tags:
+      - booking
+  /v1/hotel:
+    get:
+      consumes:
+      - application/json
+      description: List hotels
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                hotels:
+                  items:
+                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List hotels
+      tags:
+      - hotel
   /v1/hotel/{id}:
     delete:
       consumes:
@@ -399,40 +593,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Update hotel
-      tags:
-      - hotel
-  /v1/hotel/all:
-    get:
-      consumes:
-      - application/json
-      description: List all hotels
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/gin.H'
-            - properties:
-                hotels:
-                  items:
-                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
-                  type: array
-                total:
-                  type: integer
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List all hotels
       tags:
       - hotel
   /v1/hotel/create:
@@ -584,6 +744,48 @@ paths:
       security:
       - BearerAuth: []
       summary: Update room
+      tags:
+      - room
+  /v1/room/{id}/book:
+    post:
+      consumes:
+      - application/json
+      description: Book room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book room request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.CreateBookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                message:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Book room
       tags:
       - room
   /v1/room/all:
