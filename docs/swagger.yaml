@@ -439,6 +439,50 @@ paths:
       summary: List all bookings
       tags:
       - booking
+  /v1/hotel:
+    get:
+      consumes:
+      - application/json
+      description: List hotels
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/gin.H'
+            - properties:
+                hotels:
+                  items:
+                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List hotels
+      tags:
+      - hotel
   /v1/hotel/{id}:
     delete:
       consumes:
@@ -549,40 +593,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Update hotel
-      tags:
-      - hotel
-  /v1/hotel/all:
-    get:
-      consumes:
-      - application/json
-      description: List all hotels
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/gin.H'
-            - properties:
-                hotels:
-                  items:
-                    $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.Hotel'
-                  type: array
-                total:
-                  type: integer
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/github_com_tunangoo_full-time-go-dev_internal_model.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List all hotels
       tags:
       - hotel
   /v1/hotel/create:

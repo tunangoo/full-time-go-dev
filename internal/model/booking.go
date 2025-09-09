@@ -15,13 +15,13 @@ type Booking struct {
 }
 
 type CreateBookingRequest struct {
-	NumberPersons int64     `json:"number_persons" bun:"number_persons"`
-	FromDate      time.Time `json:"from_date" bun:"from_date"`
-	TillDate      time.Time `json:"till_date" bun:"till_date"`
+	NumberPersons int64     `json:"number_persons"`
+	FromDate      time.Time `json:"from_date"`
+	TillDate      time.Time `json:"till_date"`
 }
 
 type ListBookingsRequest struct {
-	RoomID   int64      `json:"room_id" bun:"room_id"`
-	FromDate *time.Time `json:"from_date" bun:"from_date"`
-	TillDate *time.Time `json:"till_date" bun:"till_date"`
+	RoomID   int64      `json:"room_id"`
+	FromDate *time.Time `json:"from_date"`
+	TillDate *time.Time `json:"till_date"`
 }

@@ -320,14 +320,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/hotel/all": {
+        "/v1/hotel": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "List all hotels",
+                "description": "List hotels",
                 "consumes": [
                     "application/json"
                 ],
@@ -337,7 +337,24 @@ const docTemplate = `{
                 "tags": [
                     "hotel"
                 ],
-                "summary": "List all hotels",
+                "summary": "List hotels",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -10,7 +10,7 @@ import (
 
 type HotelRepository interface {
 	CreateHotel(ctx context.Context, hotel *model.Hotel) error
-	ListHotels(ctx context.Context) ([]*model.Hotel, error)
+	ListHotels(ctx context.Context, req *model.ListHotelsRequest) ([]*model.Hotel, int, error)
 	GetHotelByID(ctx context.Context, id int64) (*model.Hotel, error)
 	UpdateHotel(ctx context.Context, hotel *model.Hotel) error
 	DeleteHotel(ctx context.Context, id int64) error
@@ -32,10 +32,29 @@ func (r *hotelRepository) CreateHotel(ctx context.Context, hotel *model.Hotel) e
 	return err
 }
 
-func (r *hotelRepository) ListHotels(ctx context.Context) ([]*model.Hotel, error) {
+func (r *hotelRepository) ListHotels(ctx context.Context, req *model.ListHotelsRequest) ([]*model.Hotel, int, error) {
 	var hotels []*model.Hotel
-	err := r.db.NewSelect().Model(&hotels).Scan(ctx)
-	return hotels, err
+	query := r.db.NewSelect().Model(&hotels)
+
+	if req.Search != "" {
+		query = query.Where("name ILIKE ?", "%"+req.Search+"%")
+	}
+
+	total, err := query.Count(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if req.Page > 0 && req.Limit != 0 {
+		query = query.Offset(int((req.Page - 1) * req.Limit)).Limit(int(req.Limit))
+	}
+
+	err = query.Scan(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return hotels, total, nil
 }
 
 func (r *hotelRepository) GetHotelByID(ctx context.Context, id int64) (*model.Hotel, error) {
