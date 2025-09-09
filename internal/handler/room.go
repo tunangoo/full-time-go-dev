@@ -21,7 +21,7 @@ func NewRoomHandler(
 }
 
 func (h *RoomHandler) RegisterRoutes(router gin.IRouter, authMiddleware gin.HandlerFunc) {
-	g := router.Group("/room")
+	g := router.Group("/room", authMiddleware)
 	g.GET("/all", h.ListAllRooms)
 	g.POST("/create", h.CreateRoom)
 	g.GET("/:id", h.GetRoom)
@@ -237,7 +237,16 @@ func (h *RoomHandler) BookRoom(c *gin.Context) {
 		return
 	}
 
-	user := c.MustGet("user").(model.User)
+	if req.FromDate.After(req.TillDate) {
+		c.JSON(http.StatusBadRequest, model.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "Bad request",
+			Detail:  "From date must be before till date",
+		})
+		return
+	}
+
+	user := c.MustGet("user").(*model.User)
 
 	if err := h.roomService.BookRoom(c.Request.Context(), user.ID, id, &req); err != nil {
 		log.Println("Error booking room:", err)

@@ -34,7 +34,9 @@ func wireApp(db *bun.DB, jwtProvider config.TokenProvider) (*handler.Handler, er
 	roomHandler := handler.NewRoomHandler(roomService)
 	authService := service.NewAuthService(userRepository, jwtProvider)
 	authHandler := handler.NewAuthHandler(userService, authService)
+	bookingService := service.NewBookingService(bookingRepository)
+	bookingHandler := handler.NewBookingHandler(bookingService)
 	jwtMiddleware := middleware.NewJWTMiddleware(jwtProvider, userRepository)
-	handlerHandler := handler.NewHandler(userHandler, hotelHandler, roomHandler, authHandler, jwtMiddleware)
+	handlerHandler := handler.NewHandler(userHandler, hotelHandler, roomHandler, authHandler, bookingHandler, jwtMiddleware)
 	return handlerHandler, nil
 }

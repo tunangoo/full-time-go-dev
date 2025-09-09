@@ -7,4 +7,5 @@ var ProviderSet = wire.NewSet(
 	NewHotelService,
 	NewRoomService,
 	NewAuthService,
+	NewBookingService,
 )

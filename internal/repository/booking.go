@@ -11,6 +11,9 @@ import (
 type BookingRepository interface {
 	CreateBooking(ctx context.Context, booking *model.Booking) error
 	ListBookings(ctx context.Context, req model.ListBookingsRequest) ([]*model.Booking, error)
+	GetBookingByID(ctx context.Context, id int64) (*model.Booking, error)
+	CancelBooking(ctx context.Context, id int64) error
+	ListBookingByUserID(ctx context.Context, userID int64) ([]*model.Booking, error)
 }
 
 type bookingRepository struct {
@@ -41,4 +44,27 @@ func (r *bookingRepository) ListBookings(ctx context.Context, req model.ListBook
 	err := query.Scan(ctx)
 	return bookings, err
 
+}
+
+func (r *bookingRepository) GetBookingByID(ctx context.Context, id int64) (*model.Booking, error) {
+	var booking model.Booking
+	err := r.db.NewSelect().Model(&booking).Where("id = ?", id).Scan(ctx)
+	return &booking, err
+}
+
+func (r *bookingRepository) CancelBooking(ctx context.Context, id int64) error {
+	_, err := r.db.NewUpdate().Model(&model.Booking{}).Where("id = ?", id).Set("cancelled = TRUE").Exec(ctx)
+	return err
+}
+
+func (r *bookingRepository) ListBookingByUserID(ctx context.Context, userID int64) ([]*model.Booking, error) {
+	var bookings []*model.Booking
+	query := r.db.NewSelect().Model(&bookings)
+
+	if userID != 0 {
+		query = query.Where("user_id = ?", userID)
+	}
+
+	err := query.Scan(ctx)
+	return bookings, err
 }

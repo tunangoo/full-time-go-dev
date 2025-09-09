@@ -9,6 +9,7 @@ type Booking struct {
 	NumberPersons int64     `json:"number_persons" bun:"number_persons"`
 	FromDate      time.Time `json:"from_date" bun:"from_date"`
 	TillDate      time.Time `json:"till_date" bun:"till_date"`
+	Cancelled     bool      `json:"cancelled" bun:"cancelled"`
 	CreatedAt     time.Time `json:"created_at" bun:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at" bun:"updated_at"`
 }
