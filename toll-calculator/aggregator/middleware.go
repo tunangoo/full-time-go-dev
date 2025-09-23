@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
-	"github.com/sirupsen/logrus"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 type LoggingMiddleware struct {

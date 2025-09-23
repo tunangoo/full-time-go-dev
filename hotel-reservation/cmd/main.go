@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	_ "github.com/tunangoo/full-time-go-dev/docs"
-	"github.com/tunangoo/full-time-go-dev/internal/config"
+	_ "github.com/tunangoo/full-time-go-dev/hotel-reservation/docs"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/config"
 )
 
 // @title Full Time Go Dev API

@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tunangoo/full-time-go-dev/internal/service"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/service"
 
-	"github.com/tunangoo/full-time-go-dev/internal/model"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/model"
 
 	"github.com/gin-gonic/gin"
 )

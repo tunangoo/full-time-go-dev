@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tunangoo/full-time-go-dev/internal/config"
-	"github.com/tunangoo/full-time-go-dev/internal/model"
-	"github.com/tunangoo/full-time-go-dev/internal/repository"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/config"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/model"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/repository"
 )
 
 type JWTMiddleware struct {

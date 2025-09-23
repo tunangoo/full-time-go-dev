@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
 	"math"
+
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 type CalculatorServicer interface {

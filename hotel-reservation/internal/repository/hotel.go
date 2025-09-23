@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/tunangoo/full-time-go-dev/internal/model"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/model"
 	"github.com/uptrace/bun"
 )
 

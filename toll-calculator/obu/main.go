@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
-	"github.com/gorilla/websocket"
 	"log"
 	"math"
 	"math/rand"
 	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 const wsEndpoint = "ws://127.0.0.1:30000/ws"

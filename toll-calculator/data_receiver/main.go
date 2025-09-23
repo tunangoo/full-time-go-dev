@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/websocket"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 var upgrader = websocket.Upgrader{

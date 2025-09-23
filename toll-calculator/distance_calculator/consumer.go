@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/PorcoGalliard/truck-toll-calculator/aggregator/client"
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
-	"time"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/aggregator/client"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 // This can also be called Kafka Transport

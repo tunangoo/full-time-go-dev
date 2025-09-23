@@ -7,16 +7,14 @@
 package main
 
 import (
-	"github.com/tunangoo/full-time-go-dev/internal/config"
-	"github.com/tunangoo/full-time-go-dev/internal/handler"
-	"github.com/tunangoo/full-time-go-dev/internal/middleware"
-	"github.com/tunangoo/full-time-go-dev/internal/repository"
-	"github.com/tunangoo/full-time-go-dev/internal/service"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/config"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/handler"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/middleware"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/repository"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/service"
 	"github.com/uptrace/bun"
-)
 
-import (
-	_ "github.com/tunangoo/full-time-go-dev/docs"
+	_ "github.com/tunangoo/full-time-go-dev/hotel-reservation/docs"
 )
 
 // Injectors from wire.go:

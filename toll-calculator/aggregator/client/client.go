@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
 	"net/http"
+
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 type Client struct {

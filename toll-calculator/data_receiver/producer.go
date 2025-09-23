@@ -2,8 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 type DataProducer interface {

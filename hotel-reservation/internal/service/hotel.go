@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/tunangoo/full-time-go-dev/internal/model"
-	"github.com/tunangoo/full-time-go-dev/internal/repository"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/model"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/repository"
 )
 
 type HotelService interface {

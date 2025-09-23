@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tunangoo/full-time-go-dev/internal/middleware"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/middleware"
 )
 
 type Handler struct {

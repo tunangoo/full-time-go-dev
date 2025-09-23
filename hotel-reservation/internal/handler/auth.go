@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tunangoo/full-time-go-dev/internal/model"
-	"github.com/tunangoo/full-time-go-dev/internal/service"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/model"
+	"github.com/tunangoo/full-time-go-dev/hotel-reservation/internal/service"
 )
 
 type AuthHandler struct {

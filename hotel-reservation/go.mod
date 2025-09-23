@@ -1,4 +1,4 @@
-module github.com/tunangoo/full-time-go-dev
+module github.com/tunangoo/full-time-go-dev/hotel-reservation
 
 go 1.24.5
 

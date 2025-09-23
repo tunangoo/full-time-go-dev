@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/PorcoGalliard/truck-toll-calculator/aggregator/client"
 	"log"
+
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/aggregator/client"
 )
 
 const (

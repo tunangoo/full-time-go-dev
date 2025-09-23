@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/PorcoGalliard/truck-toll-calculator/types"
+
+	"github.com/tunangoo/full-time-go-dev/toll-calculator/types"
 )
 
 type MemoryStore struct {
