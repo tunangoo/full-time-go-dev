@@ -12,3 +12,5 @@ swagger:
 	swag init -g cmd/main.go -d ./ --parseDependency --parseInternal
 test:
 	go test ./... -v
+build:
+	go build -o bin/main cmd/main.go
